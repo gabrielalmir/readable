@@ -39,13 +39,19 @@ class BookProvider with ChangeNotifier {
     }
   }
 
+  bool isInReadingList(Book book) {
+    return readingList.any((b) => b.id == book.id);
+  }
+
   Future<void> addToReadingList(Book book) async {
-    readingList.add(book);
-    notifyListeners();
+    if (!isInReadingList(book)) {
+      readingList.add(book);
+      notifyListeners();
+    }
   }
 
   void removeFromReadingList(Book book) {
-    readingList.remove(book);
+    readingList.removeWhere((b) => b.id == book.id);
     notifyListeners();
   }
 }

@@ -138,24 +138,79 @@ class HomePageState extends State<HomePage> {
                   itemCount: provider.books.length,
                   itemBuilder: (context, index) {
                     final book = provider.books[index];
+                    final isInReadingList = provider.isInReadingList(book);
 
-                    return Card(
-                      margin: const EdgeInsets.symmetric(
-                          vertical: 8, horizontal: 16),
-                      child: ListTile(
-                        title: Text(book.title),
-                        subtitle: Text(book.authors),
-                        leading: Image.network(
-                          book.thumbnail,
-                          width: 50,
-                          height: 50,
-                          fit: BoxFit.cover,
-                        ),
-                        trailing: IconButton(
-                          icon: const Icon(Icons.add),
-                          onPressed: () {
-                            provider.addToReadingList(book);
-                          },
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/bookDetails',
+                          arguments: book,
+                        );
+                      },
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: 200,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(book.thumbnail),
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                book.title,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                book.authors,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8),
+                              child: Text(
+                                'Classificação: ${book.maturityRating}',
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.blueGrey,
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: IconButton(
+                                icon: Icon(
+                                  isInReadingList ? Icons.check : Icons.add,
+                                  color: isInReadingList ? Colors.green : null,
+                                ),
+                                onPressed: isInReadingList
+                                    ? null
+                                    : () {
+                                        provider.addToReadingList(book);
+                                      },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     );
