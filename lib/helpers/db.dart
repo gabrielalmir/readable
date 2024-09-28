@@ -24,8 +24,9 @@ class DatabaseHelper {
 
     return await openDatabase(
       databasePath,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -37,9 +38,17 @@ class DatabaseHelper {
         authors TEXT,
         thumbnail TEXT,
         description TEXT,
-        maturityRating TEXT
+        maturityRating TEXT,
+        rating INTEGER  -- Adiciona a coluna de classificação
       )
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // gamb
+      await db.execute('ALTER TABLE books ADD COLUMN rating INTEGER DEFAULT 0');
+    }
   }
 
   Future<void> insertBook(Book book) async {

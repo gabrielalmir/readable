@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:readable/providers/book_provider.dart';
 
@@ -33,7 +34,22 @@ class ReadingListPage extends StatelessWidget {
                 margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: ListTile(
                   title: Text(book.title),
-                  subtitle: Text(book.authors),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(book.authors),
+                      RatingBarIndicator(
+                        rating: book.rating?.toDouble() ?? 0,
+                        itemBuilder: (context, index) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        itemCount: 5,
+                        itemSize: 20.0,
+                        direction: Axis.horizontal,
+                      ),
+                    ],
+                  ),
                   leading: Image.network(
                     book.thumbnail,
                     width: 50,

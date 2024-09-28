@@ -5,6 +5,7 @@ class Book {
   final String thumbnail;
   final String description;
   final String? maturityRating;
+  int? rating;
 
   Book({
     required this.id,
@@ -13,6 +14,7 @@ class Book {
     required this.thumbnail,
     required this.description,
     this.maturityRating,
+    this.rating,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -38,6 +40,7 @@ class Book {
       description:
           json['volumeInfo']['description'] ?? 'Sem descrição disponível',
       maturityRating: mapMaturity[maturityRating] ?? 'Não informado',
+      rating: 0,
     );
   }
 
@@ -49,6 +52,7 @@ class Book {
       'thumbnail': thumbnail,
       'description': description,
       'maturityRating': maturityRating,
+      'rating': rating,
     };
   }
 
@@ -60,6 +64,7 @@ class Book {
       thumbnail: map['thumbnail'],
       description: map['description'],
       maturityRating: map['maturityRating'],
+      rating: map['rating'],
     );
   }
 }

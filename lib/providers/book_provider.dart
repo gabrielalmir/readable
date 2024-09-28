@@ -58,6 +58,17 @@ class BookProvider with ChangeNotifier {
     }
   }
 
+  Future<void> updateBookRating(Book book) async {
+    await db.updateBook(book);
+
+    int index = readingList.indexWhere((b) => b.id == book.id);
+    if (index != -1) {
+      readingList[index] = book;
+    }
+
+    notifyListeners();
+  }
+
   void removeFromReadingList(Book book) async {
     readingList.removeWhere((b) => b.id == book.id);
     await db.deleteBook(book.id);
