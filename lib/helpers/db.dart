@@ -39,15 +39,19 @@ class DatabaseHelper {
         thumbnail TEXT,
         description TEXT,
         maturityRating TEXT,
-        rating INTEGER  -- Adiciona a coluna de classificação
+        rating INTEGER,
+        isFavorite INTEGER DEFAULT 0,
       )
     ''');
   }
 
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
-      // gamb
       await db.execute('ALTER TABLE books ADD COLUMN rating INTEGER DEFAULT 0');
+    }
+    if (oldVersion < 3) {
+      await db
+          .execute('ALTER TABLE books ADD COLUMN isFavorite INTEGER DEFAULT 0');
     }
   }
 

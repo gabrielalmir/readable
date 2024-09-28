@@ -32,6 +32,12 @@ class BookProvider with ChangeNotifier {
     }
   }
 
+  Future<void> toggleFavoriteStatus(Book book) async {
+    book.isFavorite = !book.isFavorite;
+    await db.updateBook(book);
+    notifyListeners();
+  }
+
   Future<void> fetchSuggestedBooks() async {
     isLoading = true;
     notifyListeners();

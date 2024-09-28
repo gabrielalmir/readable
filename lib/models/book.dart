@@ -6,6 +6,7 @@ class Book {
   final String description;
   final String? maturityRating;
   int? rating;
+  bool isFavorite;
 
   Book({
     required this.id,
@@ -15,6 +16,7 @@ class Book {
     required this.description,
     this.maturityRating,
     this.rating,
+    this.isFavorite = false,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class Book {
       'description': description,
       'maturityRating': maturityRating,
       'rating': rating,
+      'isFavorite': isFavorite ? 1 : 0,
     };
   }
 
@@ -65,6 +68,7 @@ class Book {
       description: map['description'],
       maturityRating: map['maturityRating'],
       rating: map['rating'],
+      isFavorite: map['isFavorite'] == 1,
     );
   }
 }

@@ -97,22 +97,36 @@ class BookDetailsPage extends StatelessWidget {
             const SizedBox(height: 16),
             Align(
               alignment: Alignment.center,
-              child: ElevatedButton.icon(
-                icon: Icon(
-                  isInReadingList ? Icons.remove : Icons.add,
-                  color: Colors.blueGrey,
-                ),
-                label: Text(isInReadingList
-                    ? 'Remover da Lista de Leitura'
-                    : 'Adicionar à Lista de Leitura'),
-                onPressed: () {
-                  if (isInReadingList) {
-                    bookProvider.removeFromReadingList(book);
-                  } else {
-                    bookProvider.addToReadingList(book);
-                  }
-                  Navigator.pop(context);
-                },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  ElevatedButton.icon(
+                    icon: Icon(
+                      isInReadingList ? Icons.remove : Icons.add,
+                      color: Colors.blueGrey,
+                    ),
+                    label: Text(isInReadingList
+                        ? 'Remover da Lista de Leitura'
+                        : 'Adicionar à Lista de Leitura'),
+                    onPressed: () {
+                      if (isInReadingList) {
+                        bookProvider.removeFromReadingList(book);
+                      } else {
+                        bookProvider.addToReadingList(book);
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      book.isFavorite ? Icons.star : Icons.star_border,
+                      color: book.isFavorite ? Colors.yellow : Colors.grey,
+                    ),
+                    onPressed: () {
+                      bookProvider.toggleFavoriteStatus(book);
+                    },
+                  ),
+                ],
               ),
             ),
           ],
