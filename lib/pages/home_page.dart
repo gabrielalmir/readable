@@ -45,12 +45,16 @@ class HomePageState extends State<HomePage> {
           Stack(
             children: [
               Container(
-                height: 180,
+                height: 120,
                 decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
-                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
                   image: DecorationImage(
                     image: const AssetImage('assets/images/book_hero.png'),
                     fit: BoxFit.cover,
@@ -63,7 +67,7 @@ class HomePageState extends State<HomePage> {
               ),
               const Positioned(
                 left: 16,
-                top: 60,
+                top: 20,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -96,7 +100,7 @@ class HomePageState extends State<HomePage> {
                 labelText: 'Digite o nome do livro',
                 labelStyle: const TextStyle(color: Colors.black54),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(4),
                 ),
                 filled: true,
                 fillColor: Colors.white,
