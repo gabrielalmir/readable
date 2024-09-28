@@ -18,17 +18,33 @@ class BookDetailsPage extends StatelessWidget {
         title: Text(book.title),
         backgroundColor: const Color.fromRGBO(47, 56, 74, 1),
         foregroundColor: Colors.white,
+        actions: [
+          // add or remove book
+          IconButton(
+            icon: Icon(
+              isInReadingList ? Icons.remove : Icons.add,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              if (isInReadingList) {
+                bookProvider.removeFromReadingList(book);
+              } else {
+                bookProvider.addToReadingList(book);
+              }
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        // Adicionado para permitir rolagem
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Center(
               child: Image.network(
                 book.thumbnail,
-                width: 150,
+                width: double.infinity,
                 height: 200,
                 fit: BoxFit.cover,
               ),
@@ -37,6 +53,7 @@ class BookDetailsPage extends StatelessWidget {
             Text(
               book.title,
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
@@ -79,11 +96,11 @@ class BookDetailsPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Align(
-              alignment: Alignment.centerRight,
+              alignment: Alignment.center,
               child: ElevatedButton.icon(
                 icon: Icon(
                   isInReadingList ? Icons.remove : Icons.add,
-                  color: Colors.white,
+                  color: Colors.blueGrey,
                 ),
                 label: Text(isInReadingList
                     ? 'Remover da Lista de Leitura'
