@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:readable/pages/book_details_page.dart';
 import 'package:readable/pages/home_page.dart';
+import 'package:readable/pages/reading_list_page.dart';
 import 'package:readable/providers/book_provider.dart';
 
 void main() {
@@ -21,7 +23,12 @@ class MainApp extends StatelessWidget {
           primarySwatch: Colors.teal,
           fontFamily: 'Lato',
         ),
-        home: HomePage(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const HomePage(),
+          '/readingList': (context) => const ReadingListPage(),
+          '/bookDetails': (context) => const BookDetailsPage(),
+        },
       ),
     );
   }

@@ -3,12 +3,14 @@ class Book {
   final String title;
   final String authors;
   final String thumbnail;
+  final String description;
 
   Book({
     required this.id,
     required this.title,
     required this.authors,
     required this.thumbnail,
+    required this.description,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Book {
       title: json['volumeInfo']['title'],
       authors: authors != null ? authors.join(', ') : 'desconhecido',
       thumbnail: thumbnail,
+      description: '',
     );
   }
 }

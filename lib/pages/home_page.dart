@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:readable/providers/book_provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  HomePageState createState() => HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
 
-  HomePage({super.key});
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => context.read<BookProvider>().fetchSuggestedBooks());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +31,21 @@ class HomePage extends StatelessWidget {
         ),
         backgroundColor: const Color.fromRGBO(47, 56, 74, 1),
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.list),
+            onPressed: () {
+              Navigator.pushNamed(context, '/readingList');
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
           Stack(
             children: [
               Container(
-                height: 150,
+                height: 180,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
                     bottomLeft: Radius.circular(16),
@@ -44,23 +63,23 @@ class HomePage extends StatelessWidget {
               ),
               const Positioned(
                 left: 16,
-                top: 50,
+                top: 60,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       'Encontre seus livros favoritos!',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 10),
                     Text(
                       'Pesquise e adicione livros à sua lista de leitura',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: Colors.white70,
                       ),
                     ),
@@ -70,15 +89,30 @@ class HomePage extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: TextField(
               controller: _controller,
               decoration: InputDecoration(
                 labelText: 'Digite o nome do livro',
+                labelStyle: const TextStyle(color: Colors.black54),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                filled: true,
+                fillColor: Colors.white,
                 suffixIcon: IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () {
-                    context.read<BookProvider>().searchBooks(_controller.text);
+                    final query = _controller.text;
+                    if (query.isNotEmpty) {
+                      context.read<BookProvider>().searchBooks(query);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Digite algo para pesquisar'),
+                        ),
+                      );
+                    }
                   },
                 ),
               ),
@@ -87,25 +121,42 @@ class HomePage extends StatelessWidget {
           Expanded(
             child: Consumer<BookProvider>(
               builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+
+                if (provider.books.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'Nenhum livro encontrado',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+                }
+
                 return ListView.builder(
                   itemCount: provider.books.length,
                   itemBuilder: (context, index) {
                     final book = provider.books[index];
 
-                    return ListTile(
-                      title: Text(book.title),
-                      subtitle: Text(book.authors),
-                      leading: Image.network(
-                        book.thumbnail,
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.cover,
-                      ),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: () {
-                          provider.addToReadingList(book);
-                        },
+                    return Card(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      child: ListTile(
+                        title: Text(book.title),
+                        subtitle: Text(book.authors),
+                        leading: Image.network(
+                          book.thumbnail,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () {
+                            provider.addToReadingList(book);
+                          },
+                        ),
                       ),
                     );
                   },
