@@ -40,4 +40,26 @@ class Book {
       maturityRating: mapMaturity[maturityRating] ?? 'Não informado',
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'title': title,
+      'authors': authors,
+      'thumbnail': thumbnail,
+      'description': description,
+      'maturityRating': maturityRating,
+    };
+  }
+
+  factory Book.fromMap(Map<String, dynamic> map) {
+    return Book(
+      id: map['id'],
+      title: map['title'],
+      authors: map['authors'],
+      thumbnail: map['thumbnail'],
+      description: map['description'],
+      maturityRating: map['maturityRating'],
+    );
+  }
 }

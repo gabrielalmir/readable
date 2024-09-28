@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:readable/helpers/db.dart';
 import 'package:readable/models/book.dart';
 import 'package:readable/repositories/google_books_repository.dart';
 import 'package:readable/services/book_service.dart';
@@ -10,6 +11,12 @@ class BookProvider with ChangeNotifier {
 
   final BookService bookService =
       BookService(googleBooksRepository: GoogleBooksRepository());
+
+  final DatabaseHelper db = DatabaseHelper();
+
+  BookProvider() {
+    _loadReadingListFromDatabase();
+  }
 
   Future<void> searchBooks(String query) async {
     isLoading = true;
@@ -46,12 +53,19 @@ class BookProvider with ChangeNotifier {
   Future<void> addToReadingList(Book book) async {
     if (!isInReadingList(book)) {
       readingList.add(book);
+      await db.insertBook(book);
       notifyListeners();
     }
   }
 
-  void removeFromReadingList(Book book) {
+  void removeFromReadingList(Book book) async {
     readingList.removeWhere((b) => b.id == book.id);
+    await db.deleteBook(book.id);
+    notifyListeners();
+  }
+
+  Future<void> _loadReadingListFromDatabase() async {
+    readingList = await db.getBooks();
     notifyListeners();
   }
 }
