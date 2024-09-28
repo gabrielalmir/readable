@@ -5,8 +5,17 @@ import 'package:readable/pages/home_page.dart';
 import 'package:readable/pages/reading_list_page.dart';
 import 'package:readable/providers/book_provider.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // obrigado professor Douglas! 😂
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => BookProvider()),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
