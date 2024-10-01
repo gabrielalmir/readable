@@ -20,5 +20,4 @@ Readable é um aplicativo de leitura de livros que permite aos usuários pesquis
 ## Autores
 
 * Gabriel Almir Pereira Ribeiro
-* Pâmela Lais Cardoso
 * Juliano Alessandro dos Santos
